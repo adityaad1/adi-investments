@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADI Investments</title>
+  <meta name="description" content="Private investment and advisory.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      background: #0a0e1a;
+      color: #b0b8c8;
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Subtle grid pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(180, 165, 130, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180, 165, 130, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Ambient glow */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(180, 155, 100, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+      50% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+    }
+
+    main {
+      max-width: 480px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Staggered fade-in */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .anim {
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out forwards;
+    }
+
+    .anim-1 { animation-delay: 0.2s; }
+    .anim-2 { animation-delay: 0.5s; }
+    .anim-3 { animation-delay: 0.8s; }
+    .anim-4 { animation-delay: 1.1s; }
+    .anim-5 { animation-delay: 1.4s; }
+
+    h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 500;
+      font-size: 2.2rem;
+      letter-spacing: 0.08em;
+      color: #e4ddd0;
+      margin-bottom: 0.6rem;
+    }
+
+    .rule {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #b4a582, transparent);
+      margin: 0 auto 1.4rem;
+    }
+
+    @keyframes ruleExpand {
+      from { width: 0; opacity: 0; }
+      to { width: 40px; opacity: 1; }
+    }
+
+    .rule {
+      animation: ruleExpand 0.6s ease-out 0.6s forwards;
+      width: 0;
+      opacity: 0;
+    }
+
+    .tagline {
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #b4a582;
+      margin-bottom: 2.4rem;
+    }
+
+    .about {
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: #8890a0;
+      margin-bottom: 2.6rem;
+    }
+
+    .contact-btn {
+      background: transparent;
+      border: 1px solid rgba(180, 165, 130, 0.4);
+      color: #b4a582;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.75rem 2.2rem;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(180, 165, 130, 0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+
+    .contact-btn:hover {
+      border-color: #b4a582;
+      color: #e4ddd0;
+      box-shadow: 0 0 20px rgba(180, 165, 130, 0.1);
+    }
+
+    .contact-btn:hover::before { opacity: 1; }
+
+    /* Modal */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 8, 16, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 10;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .overlay.active { display: flex; }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal {
+      background: #10141f;
+      border: 1px solid rgba(180, 165, 130, 0.12);
+      padding: 2.5rem 2rem;
+      max-width: 400px;
+      width: 100%;
+      position: relative;
+      animation: modalIn 0.3s ease-out;
+    }
+
+    .modal h2 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      color: #e4ddd0;
+      margin-bottom: 1.6rem;
+    }
+
+    .modal .close {
+      position: absolute;
+      top: 1rem;
+      right: 1.2rem;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #555d70;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+
+    .modal .close:hover { color: #b4a582; }
+
+    .field {
+      margin-bottom: 1.3rem;
+      text-align: left;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #555d70;
+      margin-bottom: 0.45rem;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(180, 165, 130, 0.2);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: #e4ddd0;
+      padding: 0.5rem 0;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: #b4a582;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, rgba(180, 165, 130, 0.2), rgba(180, 165, 130, 0.08));
+      border: 1px solid rgba(180, 165, 130, 0.3);
+      color: #b4a582;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.75rem 2rem;
+      cursor: pointer;
+      margin-top: 0.8rem;
+      width: 100%;
+      transition: all 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, rgba(180, 165, 130, 0.3), rgba(180, 165, 130, 0.15));
+      border-color: #b4a582;
+      color: #e4ddd0;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 2rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #2a2f3a;
+      z-index: 1;
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 1.7rem; }
+      .about { font-size: 0.84rem; }
+      .modal { padding: 2rem 1.5rem; }
+      footer { position: static; margin-top: 4rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .anim { animation: none; opacity: 1; }
+      .rule { animation: none; width: 40px; opacity: 1; }
+      body::after { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 class="anim anim-1">ADI Investments</h1>
+    <div class="rule"></div>
+    <p class="tagline anim anim-2">Private Investment &amp; Advisory</p>
+    <p class="about anim anim-3">
+      Founded by Aditya Deshpande, ADI Investments is the personal investment
+      platform through which Aditya partners with founders, operators, and
+      businesses building enduring value. An aerospace engineer by training,
+      Aditya previously led advanced technology development programs at
+      Northrop Grumman before founding Samagra, a long-term holding company
+      focused on building and acquiring businesses. His approach combines deep
+      technical expertise, disciplined execution, and a passion for creating
+      companies that can thrive for decades.
+    </p>
+    <div class="anim anim-4 btn-wrap" id="btn-wrap">
+      <button class="contact-btn" id="contact-btn" onclick="document.getElementById('overlay').classList.add('active')">Contact</button>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      var btn = document.getElementById('contact-btn');
+      var dodges = 0;
+      var maxDodges = 2;
+
+      btn.addEventListener('mouseenter', function() {
+        if (dodges >= maxDodges) return;
+        dodges++;
+        var angle = Math.random() * Math.PI * 2;
+        var dist = 30 + Math.random() * 30;
+        var tx = Math.cos(angle) * dist;
+        var ty = Math.sin(angle) * dist;
+        btn.style.transition = 'transform 0.25s ease';
+        btn.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
+      });
+    })();
+  </script>
+
+  <div class="overlay" id="overlay" onclick="if(event.target===this)this.classList.remove('active')">
+    <div class="modal">
+      <button class="close" onclick="document.getElementById('overlay').classList.remove('active')">&times;</button>
+      <h2>Get in Touch</h2>
+      <form action="https://formsubmit.co/adi@ad3invest.com" method="POST">
+        <input type="hidden" name="_subject" value="ADI Investments - New Inquiry">
+        <input type="hidden" name="_captcha" value="false">
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="anim anim-5">ADI Investments &middot; Private</footer>
+</body>
+</html>
